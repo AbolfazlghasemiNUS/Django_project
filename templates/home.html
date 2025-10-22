@@ -1,0 +1,149 @@
+{% load static %}
+{% load jformat %}
+<!DOCTYPE html>
+<html lang="fa">
+  <head>
+    <meta charset="UTF-8" />
+    <title>صفحه اصلی</title>
+
+    <!-- فونت -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Vazirmatn&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- استایل -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+    <style>
+      /* وسط‌چین کردن کل محتوا */
+      .container {
+        max-width: 800px;
+        margin: 0 auto;
+        background: #fff;
+        padding: 25px;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        text-align: center;
+      }
+
+      .post-card {
+        background: #e3f2fd;
+        border-radius: 8px;
+        padding: 20px;
+        margin: 20px auto;
+        max-width: 90%;
+        box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+        text-align: center;
+        border: 1px solid #ccc;
+      }
+
+      .post-card h2 {
+        margin-top: 0;
+        color: #1565c0;
+      }
+
+      .post-card .date {
+        font-size: 0.9em;
+        color: #555;
+        margin-bottom: 10px;
+      }
+
+      .comments-section {
+        text-align: center;
+        margin-top: 20px;
+        padding-top: 10px;
+        border-top: 1px solid #ccc;
+      }
+
+      .comments-section ul {
+        list-style: none;
+        padding: 0;
+      }
+
+      .comments-section li {
+        margin-bottom: 10px;
+      }
+
+      .comment-form textarea {
+        width: 100%;
+        resize: none;
+      }
+
+      .btn-logout {
+        background-color: #3815e4;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+      }
+
+      .btn-logout:hover {
+        background-color: #2c3e50;
+      }
+
+      img {
+        max-width: 300px;
+        height: auto;
+        display: block;
+        margin: 10px auto;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="container">
+      <h1>خوش آمدید {{ user.username }}</h1>
+
+      {% for post in posts %}
+      <div class="post-card">
+        <h2>{{ post.title }}</h2>
+        <p class="date">تاریخ: {{ post.jalali_date }}</p>
+        <p>{{ post.body }}</p>
+
+        {% if post.image %}
+        <img src="{{ post.image.url }}" alt="{{ post.title }}" />
+        {% endif %}
+
+        <div class="comments-section">
+          <h3>کامنت‌ها:</h3>
+          {% if post.comments.exists %}
+            <ul>
+              {% for comment in post.comments.all %}
+              <li>
+                <strong>{{ comment.user.username }}:</strong> {{ comment.body }}
+                <br />
+                <small style="color: gray;">{{ comment.created_date|jformat:"%Y/%m/%d %H:%M" }}</small>
+              </li>
+              {% endfor %}
+            </ul>
+          {% else %}
+            <p>هیچ کامنتی ثبت نشده است.</p>
+          {% endif %}
+        </div>
+
+        {% if user.is_authenticated %}
+        <div class="comment-form" style="margin-top: 15px;">
+          <form method="post" action="{% url 'home' %}">
+            {% csrf_token %}
+            <input type="hidden" name="post_id" value="{{ post.id }}" />
+            <textarea name="comment_text" rows="3" placeholder="کامنت خود را اینجا بنویسید..." required></textarea>
+            <button type="submit" style="margin-top: 5px;">ارسال</button>
+          </form>
+        </div>
+        {% else %}
+          <p>برای ارسال کامنت باید <a href="{% url 'login' %}">وارد شوید</a>.</p>
+        {% endif %}
+      </div>
+      {% empty %}
+      <p>هیچ مطلبی برای نمایش وجود ندارد.</p>
+      {% endfor %}
+
+      <form method="post" action="{% url 'logout' %}" style="margin-top: 30px;">
+        {% csrf_token %}
+        <button type="submit" class="btn-logout">خروج</button>
+      </form>
+    </div>
+  </body>
+</html>

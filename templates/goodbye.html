@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+  <meta charset="UTF-8" />
+  <title>خداحافظ</title>
+
+  <!-- فونت وزیر از CDN -->
+  <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazir-font@v30.1.0/dist/font-face.css" rel="stylesheet" type="text/css" />
+
+  <script>
+    // هدایت خودکار به صفحه اصلی بعد از ۲ ثانیه
+    setTimeout(() => {
+      window.location.href = "/home/";
+    }, 2000);
+  </script>
+
+  <style>
+    body {
+      text-align: center;
+      padding: 50px;
+      font-family: "Vazir", sans-serif;
+      background: #f4f4f4;
+      color: #000; /* متن پیش‌فرض مشکی */
+    }
+    .card {
+      display: inline-block;
+      background: #fff;
+      padding: 30px 50px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+    h2 {
+      color: #d32f2f;
+      margin-bottom: 15px;
+    }
+    p {
+      font-size: 18px;
+      color: #111; /* کمی تیره‌تر برای خوانایی بهتر */
+      margin: 0;
+    }
+    .redirect {
+      margin-top: 20px;
+      font-size: 14px;
+      color: #555;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h2>شما با موفقیت خارج شدید.</h2>
+    <p><b>از حضور شما سپاسگزاریم.</b></p>
+    <div class="redirect">در حال بازگشت به صفحه اصلی...</div>
+  </div>
+</body>
+</html>
